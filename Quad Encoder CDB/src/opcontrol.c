@@ -52,83 +52,6 @@
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 
-//void opFlywheel() {
-//
-//	if (joystickGetDigital(1, 6, JOY_DOWN)){
-//		motorSet(7, 30);
-//		motorSet(8, -30);
-//
-//		delay(200);
-//
-//		motorSet(7, 60);
-//		motorSet(8, -60);
-//
-//		delay(200);
-//
-//		motorSet(7, 90);
-//		motorSet(8, -90);
-//
-//		delay(200);
-//
-//		motorSet(7, 127);
-//		motorSet(8, -127);
-//
-//		delay(100);
-//
-//
-//
-//	}
-//	else if (joystickGetDigital(1, 6, JOY_UP)){
-//		motorSet(7, 90);
-//		motorSet(8, -90);
-//
-//		delay(100);
-//
-//		motorSet(7, 60);
-//		motorSet(8, -60);
-//
-//		delay(100);
-//
-//		motorSet(7, 30);
-//		motorSet(8, -30);
-//
-//		delay(100);
-//
-//		motorSet(7, 0);
-//		motorSet(8, 0);
-//	}
-
-// float speed = 0;
-// int toggle = 0;
-//
-// if (joystickGetDigital(1, 6, JOY_DOWN)) {     ///Flywheel toggle
-//	 toggle = abs(toggle - 1);
-//	 	 while (joystickGetDigital(1, 6, JOY_DOWN)) {
-//	 		 delay(20);
-//	 	 }
-// }
-// if (toggle == 1 && speed < 127) {
-//	 speed = speed + 1;
-// } else if (toggle == 0 && speed > 0) {
-//	 speed = speed - 1;
-//
-// }
-//
-// if (joystickGetDigital(1, 8, JOY_UP)) {            ///Flywheel speed up
-// speed = speed + 10;
-// while (joystickGetDigital(1, 8, JOY_UP)) {
-// delay(20);
-// }
-// }
-// if (joystickGetDigital(1, 8, JOY_DOWN)) {          ///Flywheel slow down
-// speed = speed - 10;
-// while (joystickGetDigital(1, 8, JOY_DOWN)) {
-// delay(20);
-// }
-// }
-// motorSet(7, -speed);
-// motorSet(8, -speed);
-//}
 void opBase() {                            ///Left side base
 	if (abs(joystickGetAnalog(1, 3)) > 15) {
 		motorSet(1, joystickGetAnalog(1, 3));
@@ -165,129 +88,50 @@ void opIntake() {
 	} else {
 		motorSet(10, 0);
 	}
-} //[pp[]]
+}
 
-float set = 3;
-float currentSpeed = 0;
-float vLast = 0;
-float iLast = -0.01;
-float i = 0;
-float v = 0;
-float speed = 0;
-int manual = 0;
-int counts = 0;
-void opFlywheel() {
-
-	int counts = encoderGet(leftflywheelquadencoder);
-		encoderReset(leftflywheelquadencoder);
-		delay(1000);
-		currentSpeed = counts/360;
-
-//	if (joystickGetDigital(1, 6, JOY_DOWN)) {
-//		motorSet(7, 60);
-//		motorSet(8, -60);
-//
-//		delay(500);
-//
-//		motorSet(7, 127);
-//		motorSet(8, -127);
-//	}
-//
-//	if (joystickGetDigital(1, 6, JOY_UP)) {
-//		motorSet(7, 60);
-//		motorSet(8, -60);
-//
-//		delay(500);
-//
-//		motorSet(7, 0);
-//		motorSet(8, 0);
-//	}
-//
-//	if (joystickGetDigital(1, 8, JOY_UP)) {
-//		motorSet(7, 60);
-//		motorSet(8, -60);
-//	}
-//
-//	if(joystickGetDigital(1, 8, JOY_RIGHT)) {
-//		motorSet(7, 100);
-//		motorSet(8, -100);
-//	}
-
-if (joystickGetDigital(1, 8, JOY_LEFT)) {
-	manual = abs(manual - 1);
-	while(joystickGetDigital(1, 8, JOY_LEFT)) {
-		delay(50);
-		}
-
+float lastLeft;
+float velocityLeft;
+float deltaEncoderLeft;
+float lastRight;
+float velocityRight;
+float deltaEncoderRight;
+void calcVelocity(void*ignore) {
+	while (1) {
+		deltaEncoderLeft = encoderGet(leftflywheelquadencoder) - lastLeft;
+		lastLeft = encoderGet(leftflywheelquadencoder);
+		velocityLeft = deltaEncoderLeft / 36 * 35 / 3; //Converts quad encoder measure to
+											//rotations per second on the flywheel itself
+		deltaEncoderRight = encoderGet(rightflywheelquadencoder) - lastRight;
+		lastRight = encoderGet(rightflywheelquadencoder);
+		velocityRight = deltaEncoderRight / 36 * 35 / 3; //Converts quad encoder measure to
+											//rotations per second on the flywheel itself
+		printf("%f", velocityRight);
+		delay(100);
 	}
+}
 
-//	if(joystickGetDigital(1, 6, JOY_DOWN)){ ///Gradual speed up
-//		speed+=.3;
-//	}
-//
-//	if(joystickGetDigital(1, 6, JOY_UP)){   ///Gradual slow  down
-//		speed-=.3;
-//
-//
-//	}
-//	if(joystickGetDigital(1, 8, JOY_UP)){   ///Increase speed by 10
-//		speed+=10;
-//		while(joystickGetDigital(1, 8, JOY_UP)){
-//				delay(50);
-//			}
-//	}
-//	if(joystickGetDigital(1, 8, JOY_DOWN)){   ///Decrease speed by 10
-//		speed-=10;
-//		while(joystickGetDigital(1, 8, JOY_DOWN)){ ///Debounce
-//			delay(50);
-//		}
-//	}
-//	if(joystickGetDigital(1, 8, JOY_RIGHT)){   ///Set speed to 100
-//		speed = 100;
-//
-//	}
-//
-//	if(joystickGetDigital(1, 8, JOY_LEFT)){     ///Set speed to 77
-//		speed = 77;
-//	}
-//
-//	if(joystickGetDigital(1, 7, JOY_LEFT)){     ///Increase speed by 5
-//		speed+=5;
-//		while(joystickGetDigital(1, 7, JOY_LEFT)){
-//				delay(50);
-//			}
-//	}
-//
-//	if (joystickGetDigital(1, 7, JOY_RIGHT)){   ///Decrease speed by 5
-//		speed-=5;
-//		while(joystickGetDigital(1, 7, JOY_RIGHT)){
-//				delay(50);
-//			}
-//	}
-//
-//	motorSet(5, -speed);            ///Corresponds speed to motor values
-//	motorSet(7, speed);
+int manual = 1;
 
-	if (manual == 0){
-		v =  set - currentSpeed;
-		i += v;
-	if((v<0) && (vLast<0)){
-		i = (i + iLast)/2;
+void opFlywheel() {
+		motorSet(5, 60);
+		motorSet(7, 60);
+	if (joystickGetDigital(1, 8, JOY_LEFT)) {
+		manual = abs(manual - 1);
+		while (joystickGetDigital(1, 8, JOY_LEFT)) {
+			delay(50);
 		}
-		vLast = v;
-		iLast = i;
-		motorSet(9, 30 * i);
+
 	}
 
 }
 
 void operatorControl() {
-
+	taskCreate(calcVelocity, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
 	while (1) {                ///Runs all functions
 		opBase();
 		opFlywheel();
 		opIntake();
-
 		delay(20);
 	}
 }

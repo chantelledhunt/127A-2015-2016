@@ -114,9 +114,9 @@ void initialize();
 void operatorControl(); 
  
 extern Encoder leftquadencoder;
-Encoder rightquadencoder;
-Encoder leftflywheelquadencoder;
-Encoder rightflywheelquadencoder;
+extern Encoder rightquadencoder;
+extern Encoder leftflywheelquadencoder;
+extern Encoder rightflywheelquadencoder;
 
 
 // End C++ export structure
