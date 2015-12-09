@@ -1,0 +1,2 @@
+Testing 
+encoders go in digital ports
