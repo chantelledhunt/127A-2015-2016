@@ -100,38 +100,130 @@ void calcVelocity(void*ignore) {
 	while (1) {
 		deltaEncoderLeft = encoderGet(leftflywheelquadencoder) - lastLeft;
 		lastLeft = encoderGet(leftflywheelquadencoder);
-		velocityLeft = deltaEncoderLeft / 36 * 35 / 3; //Converts quad encoder measure to
-											//rotations per second on the flywheel itself
+		velocityLeft = deltaEncoderLeft / 72 * 35 / 3; //Converts quad encoder measure to
+		//rotations per second on the flywheel itself
 		deltaEncoderRight = encoderGet(rightflywheelquadencoder) - lastRight;
 		lastRight = encoderGet(rightflywheelquadencoder);
-		velocityRight = deltaEncoderRight / 36 * 35 / 3; //Converts quad encoder measure to
-											//rotations per second on the flywheel itself
-		printf("%f", velocityRight);
-		delay(100);
+		velocityRight = deltaEncoderRight / 72 * 35 / 3; //Converts quad encoder measure to
+		//rotations per second on the flywheel itself
+		delay(200);
 	}
 }
 
-int manual = 1;
+int manual = 0;
+float speedLeft, speedLeftAtZero;
+float speedRight, speedRightAtZero;
+float errorLeft, lastErrorLeft;
+float errorRight, lastErrorRight;
+float targetLeft = 20;
+float targetRight = 20;
+bool leftFirstCross = 1;
+bool rightFirstCross = 1;
 
 void opFlywheel() {
-		motorSet(5, 60);
-		motorSet(7, 60);
-	if (joystickGetDigital(1, 8, JOY_LEFT)) {
-		manual = abs(manual - 1);
-		while (joystickGetDigital(1, 8, JOY_LEFT)) {
-			delay(50);
+	while (1) {
+		if (joystickGetDigital(1, 8, JOY_RIGHT)) {
+			manual = abs(manual - 1);
+			while (joystickGetDigital(1, 8, JOY_LEFT)) {
+				delay(50);
+			}
 		}
 
+		if(joystickGetDigital(1, 6, JOY_DOWN)){
+			targetLeft = 15;
+			targetRight = 15;
+		}
+
+		if (manual == 0) {
+			errorLeft = targetLeft - velocityLeft;
+			errorRight = targetRight - velocityRight;  //Calculates proper speed
+
+			speedLeft = speedLeft + (errorLeft * 0.01);
+			speedRight = speedRight + (errorRight * 0.01); //Calculates proper speed
+
+			if (speedLeft > 127) {
+				speedLeft = 127;  //Failsafe
+			}
+			if (speedRight> 127) {
+				speedRight = 127;  //Failsafe
+						}
+
+			if (speedLeft < 0) {
+				speedLeft = 0;    //Failsafe
+			}
+
+			if (speedRight < 0) {
+				speedRight = 0;    //Failsafe
+			}
+
+
+
+			if (errorLeft * lastErrorLeft < 0) { //If error crosses 0
+				if (leftFirstCross == 1) {
+				speedLeft = 40;                  //Fiddle factor variable
+
+				leftFirstCross = 0;
+				}
+
+				else {
+					speedLeft = 0.5 * (speedLeft + speedLeftAtZero);
+				}
+				speedLeftAtZero = speedLeft;
+
+			}
+
+			if(manual == 1){
+			if(joystickGetDigital(1, 8, JOY_LEFT)){
+			speedLeft = 67;
+			speedRight = 67;
+
+				}
+
+			if(joystickGetDigital(1, 7, JOY_LEFT)){
+			speedLeft += 3, speedLeft +=3;
+				}
+
+			if(joystickGetDigital(1, 7, JOY_RIGHT)){
+			speedLeft -=3, speedRight -=3;
+			}
+
+			}
+
+
+
+			if (errorRight * lastErrorRight < 0) { //If error crosses 0
+				if (rightFirstCross == 1) {
+				speedRight = 40;                  //Fiddle factor variable
+
+				rightFirstCross = 0;
+				}
+
+				else {
+					speedRight = 0.5 * (speedRight + speedRightAtZero);
+				}
+				speedRightAtZero = speedRight;
+
+			}
+
+
+			lastErrorRight = errorRight;
+			lastErrorLeft = errorLeft;
+
+		}
+		motorSet(5, -speedRight);   //Right
+		motorSet(7, speedLeft);    //Left
+		delay(20);
 	}
-
 }
-
 void operatorControl() {
-	taskCreate(calcVelocity, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+	taskCreate(calcVelocity, TASK_DEFAULT_STACK_SIZE, NULL,
+			TASK_PRIORITY_DEFAULT + 1);
+	taskCreate(opFlywheel, TASK_DEFAULT_STACK_SIZE, NULL,
+			TASK_PRIORITY_DEFAULT);
 	while (1) {                ///Runs all functions
 		opBase();
-		opFlywheel();
 		opIntake();
-		delay(20);
+		printf("%f; %f; \n", velocityLeft, speedLeft);
+		delay(200);
 	}
 }

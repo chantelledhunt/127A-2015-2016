@@ -69,8 +69,8 @@ Encoder rightflywheelquadencoder;
 void initialize() {
 leftquadencoder = encoderInit(1, 2, false);   //Base encoders are declared
 rightquadencoder = encoderInit(3, 4, true);
-leftflywheelquadencoder = encoderInit(5, 6, false); //Flywheel encoders are declared
-rightflywheelquadencoder = encoderInit(7, 8, true);
+rightflywheelquadencoder = encoderInit(5, 6, false); //Flywheel encoders are declared
+leftflywheelquadencoder = encoderInit(7, 8, false);
 
 lcdInit(uart1);
 lcdClear(uart1);
