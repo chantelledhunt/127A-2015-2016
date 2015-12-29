@@ -54,176 +54,91 @@
 
 void opBase() {                            ///Left side base
 	if (abs(joystickGetAnalog(1, 3)) > 15) {
-		motorSet(1, joystickGetAnalog(1, 3));
-		motorSet(2, joystickGetAnalog(1, 3));
-		motorSet(3, joystickGetAnalog(1, 3));
+		motorSet(6, joystickGetAnalog(1, 3));
+		motorSet(7, joystickGetAnalog(1, 3));
+		motorSet(8, joystickGetAnalog(1, 3));
 	} else {
-		motorSet(1, 0);
-		motorSet(2, 0);
-		motorSet(3, 0);
+		motorSet(6, 0);
+		motorSet(7, 0);
+		motorSet(8, 0);
 	}                                        ///Right side base
 	if (abs(joystickGetAnalog(1, 2)) > 15) {
+		motorSet(3, -joystickGetAnalog(1, 2));
 		motorSet(4, -joystickGetAnalog(1, 2));
-		motorSet(8, -joystickGetAnalog(1, 2));
-		motorSet(6, -joystickGetAnalog(1, 2));
+		motorSet(5, -joystickGetAnalog(1, 2));
 	} else {
+		motorSet(3, 0);
 		motorSet(4, 0);
-		motorSet(8, 0);
-		motorSet(6, 0);
+		motorSet(5, 0);
 	}
 }
+
+int topIntake = 0;
+int bottomIntake = 0;
+
 void opIntake() {
-	if (joystickGetDigital(1, 7, JOY_DOWN)) {     ///Down/outtake
-		motorSet(9, 127);
-	} else if (joystickGetDigital(1, 7, JOY_UP)) {  ///Up or intake
-		motorSet(9, -127);
+	if (joystickGetDigital(1, 5, JOY_UP)) {     //Sets both intakes to suck in
+		topIntake = 127;
+		bottomIntake = -127;
+	} else if (joystickGetDigital(1, 5, JOY_DOWN)) { //Sets both intakes to spit out
+		topIntake = -127;
+		bottomIntake = 127;
 	} else {
-		motorSet(9, 0);
+		topIntake = 0;
+		bottomIntake = 0;
 	}
 
-	if (joystickGetDigital(1, 5, JOY_DOWN)) {    ///Intake
-		motorSet(10, 127);
-	} else if (joystickGetDigital(1, 5, JOY_UP)) { ///Outtake
-		motorSet(10, -127);
-	} else {
-		motorSet(10, 0);
+	if (joystickGetDigital(1, 7, JOY_UP)) {      //Sets top intake to go up
+		topIntake = 127;
 	}
+
+	if (joystickGetDigital(1, 7, JOY_DOWN)) {      //Sets top intake to go down
+		topIntake = -127;
+	}
+
+	if (joystickGetDigital(1, 7, JOY_LEFT)) {      //Sets bottom intake to go up
+		bottomIntake = -127;
+	}
+
+	if (joystickGetDigital(1, 7, JOY_RIGHT)) {
+		bottomIntake = 127;
+	}
+	motorSet(1, topIntake);
+	motorSet(10, bottomIntake);
+
 }
 
-float lastLeft;
-float velocityLeft;
-float deltaEncoderLeft;
-float lastRight;
-float velocityRight;
-float deltaEncoderRight;
-void calcVelocity(void*ignore) {
-	while (1) {
-		deltaEncoderLeft = encoderGet(leftflywheelquadencoder) - lastLeft;
-		lastLeft = encoderGet(leftflywheelquadencoder);
-		velocityLeft = deltaEncoderLeft / 72 * 35 / 3; //Converts quad encoder measure to
-		//rotations per second on the flywheel itself
-		deltaEncoderRight = encoderGet(rightflywheelquadencoder) - lastRight;
-		lastRight = encoderGet(rightflywheelquadencoder);
-		velocityRight = deltaEncoderRight / 72 * 35 / 3; //Converts quad encoder measure to
-		//rotations per second on the flywheel itself
-		delay(200);
-	}
-}
-
-int manual = 0;
-float speedLeft, speedLeftAtZero;
-float speedRight, speedRightAtZero;
-float errorLeft, lastErrorLeft;
-float errorRight, lastErrorRight;
-float targetLeft = 20;
-float targetRight = 20;
-bool leftFirstCross = 1;
-bool rightFirstCross = 1;
+int speed = 0;
 
 void opFlywheel() {
-	while (1) {
-		if (joystickGetDigital(1, 8, JOY_RIGHT)) {
-			manual = abs(manual - 1);
-			while (joystickGetDigital(1, 8, JOY_LEFT)) {
-				delay(50);
-			}
-		}
-
-		if(joystickGetDigital(1, 6, JOY_DOWN)){
-			targetLeft = 15;
-			targetRight = 15;
-		}
-
-		if (manual == 0) {
-			errorLeft = targetLeft - velocityLeft;
-			errorRight = targetRight - velocityRight;  //Calculates proper speed
-
-			speedLeft = speedLeft + (errorLeft * 0.01);
-			speedRight = speedRight + (errorRight * 0.01); //Calculates proper speed
-
-			if (speedLeft > 127) {
-				speedLeft = 127;  //Failsafe
-			}
-			if (speedRight> 127) {
-				speedRight = 127;  //Failsafe
-						}
-
-			if (speedLeft < 0) {
-				speedLeft = 0;    //Failsafe
-			}
-
-			if (speedRight < 0) {
-				speedRight = 0;    //Failsafe
-			}
-
-
-
-			if (errorLeft * lastErrorLeft < 0) { //If error crosses 0
-				if (leftFirstCross == 1) {
-				speedLeft = 40;                  //Fiddle factor variable
-
-				leftFirstCross = 0;
-				}
-
-				else {
-					speedLeft = 0.5 * (speedLeft + speedLeftAtZero);
-				}
-				speedLeftAtZero = speedLeft;
-
-			}
-
-			if(manual == 1){
-			if(joystickGetDigital(1, 8, JOY_LEFT)){
-			speedLeft = 67;
-			speedRight = 67;
-
-				}
-
-			if(joystickGetDigital(1, 7, JOY_LEFT)){
-			speedLeft += 3, speedLeft +=3;
-				}
-
-			if(joystickGetDigital(1, 7, JOY_RIGHT)){
-			speedLeft -=3, speedRight -=3;
-			}
-
-			}
-
-
-
-			if (errorRight * lastErrorRight < 0) { //If error crosses 0
-				if (rightFirstCross == 1) {
-				speedRight = 40;                  //Fiddle factor variable
-
-				rightFirstCross = 0;
-				}
-
-				else {
-					speedRight = 0.5 * (speedRight + speedRightAtZero);
-				}
-				speedRightAtZero = speedRight;
-
-			}
-
-
-			lastErrorRight = errorRight;
-			lastErrorLeft = errorLeft;
-
-		}
-		motorSet(5, -speedRight);   //Right
-		motorSet(7, speedLeft);    //Left
-		delay(20);
+	if (joystickGetDigital(1, 8, JOY_UP)) {    //Sets speed for long range shot
+		speed = 127;
 	}
+
+	if (joystickGetDigital(1, 8, JOY_DOWN)) {   //Sets speed for close shot
+		speed = 90;
+	}
+
+	if (joystickGetDigital(1, 8, JOY_LEFT)) { //Temporarily increases speed to increase fire rate
+		speed = 100;
+		delay(500);
+		speed = 90;
+	}
+
+	if (joystickGetDigital(1, 8, JOY_RIGHT)){
+	speed = speed - 5;
+	delay(100);
+	}
+
+	motorSet(2, -speed);
+	motorSet(9, speed);
+
 }
+
 void operatorControl() {
-	taskCreate(calcVelocity, TASK_DEFAULT_STACK_SIZE, NULL,
-			TASK_PRIORITY_DEFAULT + 1);
-	taskCreate(opFlywheel, TASK_DEFAULT_STACK_SIZE, NULL,
-			TASK_PRIORITY_DEFAULT);
 	while (1) {                ///Runs all functions
 		opBase();
 		opIntake();
-		printf("%f; %f; \n", velocityLeft, speedLeft);
-		delay(200);
+		opFlywheel();
 	}
 }

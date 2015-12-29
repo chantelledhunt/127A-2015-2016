@@ -60,7 +60,7 @@ void drive(int left, int right) {
 
 void intake(int motorControlValue) {
 	motorSet(10, motorControlValue);
-	motorSet(9, motorControlValue);
+	motorSet(4, motorControlValue);
 }
 
 void flywheel(int motorControlValue) {
@@ -87,61 +87,33 @@ void driveEncoder(int target) {
 }
 
 void autonomous() {
-//	driveEncoder(500);
-//	flywheel(127); /*flyhweel speeds up*/
-//	delay(500);
-//	flywheel(127);
-//	intake(127); /*intakes first ball*/
-//	delay(200);
-//	intake(0);
-//	flywheel(127); /*shoots first ball*/
-//	delay(600);
-//	intake(127); /*intakes second ball*/
-//	flywheel(127);
-//	delay(200);
-//	intake(0);
-//	flywheel(127); /*shoots second ball*/
-//	delay(600);
-//	intake(127); /*intakes third ball*/
-//	flywheel(127);
-//	delay(200);
-//	intake(0);
-//	flywheel(127); /*shoots third ball*/
-//	delay(600);
-//	intake(127); /*intakes fourth ball*/
-//	flywheel(127);
-//	delay(200);
-//	intake(0);
-//	flywheel(127); /*shoots fourth ball*/
-//	delay(600);
-//	flywheel(100);/*flywheel slows down*/
-//	delay(200);
-//	flywheel(60);
-//	delay(200);
-//	flywheel(30);
-//	delay(200);
-//	flywheel(0);
-//	delay(200);
-flywheel(20);
+
+flywheel(20);  //127A
 delay(500);
 flywheel(40);
 delay(500);
 flywheel(60);
 delay(500);
-flywheel(65);
+flywheel(60);
 delay(3500);
 
 intake(127);
 
-delay(1500);
+delay(250);
 
 intake(0);
+
+flywheel(68);
 
 delay(1500);
 
 intake(127);
 
-delay(1500);
+delay(750);
+
+intake(0);
+
+delay(750);
 
 intake(127);
 
@@ -156,3 +128,4 @@ delay(200);
 flywheel(75);
 delay(1400);
 }
+
