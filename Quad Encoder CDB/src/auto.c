@@ -50,82 +50,60 @@
  */
 
 void drive(int left, int right) {
-	motorSet(1, left);
-	motorSet(2, left);
-	motorSet(3, left);
-	motorSet(4, right);
-	motorSet(5, right);
-	motorSet(6, right);
+	motorSet(6, left);
+	motorSet(7, left);
+	motorSet(8, left);
+	motorSet(3, -right);
+	motorSet(4, -right);
+	motorSet(5, -right);
 }
 
 void intake(int motorControlValue) {
 	motorSet(10, motorControlValue);
-	motorSet(4, motorControlValue);
+	motorSet(1, motorControlValue);
 }
 
 void flywheel(int motorControlValue) {
-	motorSet(7, motorControlValue);
-	motorSet(5  , -motorControlValue);
-}
-
-void driveEncoder(int target) {
-	drive(100, 100);
-	while (encoderGet(leftquadencoder) < target
-			|| encoderGet(rightquadencoder) < target) {
-		if (encoderGet(leftquadencoder) >= target) {
-			motorSet(1, 0);
-			motorSet(2, 0);
-			motorSet(3, 0);
-		}
-		if (encoderGet(rightquadencoder) >= target) {
-			motorSet(4, 0);
-			motorSet(5, 0);
-			motorSet(6, 0);
-		}
-		delay(20);
-	}
+	motorSet(2, -motorControlValue);
+	motorSet(9, motorControlValue);
 }
 
 void autonomous() {
+	drive(-127, -127);   //127A's autonomous
+	delay(2000);
+	flywheel(90);
+	delay(3000);
+	drive(0, 0);
+	intake(127); //1st shot
+	delay(500);
+	intake(0);
+	delay(500);
+	intake(127); //2nd shot
+	delay(500);
+	intake(0);
+	delay(500);
+	intake(127); //3rd shot
+	delay(500);
+	intake(0);
+	delay(500);
+	intake(127); //4th shot
+	delay(500);
+	intake(0);
+	delay(500);
+	intake(127);
+	delay(6000);
+	flywheel(80);
+	delay(200);
+	flywheel(70);
+	delay(200);
+	flywheel(55);
+	delay(200);
+	flywheel(40);
+	delay(200);
+	flywheel(25);
+	delay(200);
+	flywheel(0);
 
-flywheel(20);  //127A
-delay(500);
-flywheel(40);
-delay(500);
-flywheel(60);
-delay(500);
-flywheel(60);
-delay(3500);
 
-intake(127);
-
-delay(250);
-
-intake(0);
-
-flywheel(68);
-
-delay(1500);
-
-intake(127);
-
-delay(750);
-
-intake(0);
-
-delay(750);
-
-intake(127);
-
-delay(3500);
-
-flywheel(20);
-delay(200);
-flywheel(40);
-delay(200);
-flywheel(60);
-delay(200);
-flywheel(75);
-delay(1400);
 }
 
