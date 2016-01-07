@@ -59,7 +59,7 @@ void drive(int left, int right) {
 }
 
 void intake(int motorControlValue) {
-	motorSet(10, motorControlValue);
+	motorSet(10, -motorControlValue);
 	motorSet(1, motorControlValue);
 }
 
@@ -70,29 +70,39 @@ void flywheel(int motorControlValue) {
 
 void autonomous() {
 	drive(-127, -127);   //127A's autonomous
-	delay(2000);
-	flywheel(90);
+	delay(500);
+	flywheel(30);
+	delay(500);
+	flywheel(60);
+	delay(1000);
+	flywheel(80);
 	delay(3000);
+	drive(-127, 0); //Guarantees alignment
+	delay(250);
+	drive(0, -127); //Guarantees alignment
+	delay(250);
 	drive(0, 0);
 	intake(127); //1st shot
-	delay(500);
+	delay(800);
 	intake(0);
-	delay(500);
-	intake(127); //2nd shot
-	delay(500);
-	intake(0);
-	delay(500);
-	intake(127); //3rd shot
-	delay(500);
-	intake(0);
-	delay(500);
-	intake(127); //4th shot
-	delay(500);
-	intake(0);
-	delay(500);
-	intake(127);
-	delay(6000);
 	flywheel(80);
+	delay(200);
+	intake(127); //2nd shot
+	delay(800);
+	intake(0);
+	delay(400);
+	intake(127); //3rd shot
+	delay(1000);
+	intake(0);
+	delay(200);
+	intake(127); //4th shot
+	delay(800);
+	intake(0);
+	delay(200);
+	intake(127);
+	delay(800);
+	flywheel(78);
+	delay(1000);
 	delay(200);
 	flywheel(70);
 	delay(200);

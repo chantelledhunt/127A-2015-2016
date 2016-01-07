@@ -88,11 +88,11 @@ void opIntake() {
 		bottomIntake = 0;
 	}
 
-	if (joystickGetDigital(1, 7, JOY_UP)) {      //Sets top intake to go up
+	if (joystickGetDigital(1, 6, JOY_UP)) {      //Sets top intake to go up
 		topIntake = 127;
 	}
 
-	if (joystickGetDigital(1, 7, JOY_DOWN)) {      //Sets top intake to go down
+	if (joystickGetDigital(1, 6, JOY_DOWN)) {      //Sets top intake to go down
 		topIntake = -127;
 	}
 
@@ -103,33 +103,62 @@ void opIntake() {
 	if (joystickGetDigital(1, 7, JOY_RIGHT)) {
 		bottomIntake = 127;
 	}
+
+	if (joystickGetDigital(2, 6, JOY_UP)){     //Partner joystick top intake control
+		bottomIntake = -127;
+	}
+	if (joystickGetDigital(2, 6, JOY_DOWN)){
+		bottomIntake = 127;
+	}
 	motorSet(1, topIntake);
 	motorSet(10, bottomIntake);
 
 }
 
 int speed = 0;
+int longShot = 127;
+int shortShot = 77;
 
 void opFlywheel() {
 	if (joystickGetDigital(1, 8, JOY_UP)) {    //Sets speed for long range shot
-		speed = 127;
+		speed = longShot;
 	}
 
 	if (joystickGetDigital(1, 8, JOY_DOWN)) {   //Sets speed for close shot
-		speed = 90;
+		speed = shortShot;
 	}
 
-	if (joystickGetDigital(1, 8, JOY_LEFT)) { //Temporarily increases speed to increase fire rate
-		speed = 100;
+	if (joystickGetDigital(1, 8, JOY_RIGHT)) {
+		speed = speed - 5;
+		delay(100);
+	}
+
+	if (joystickGetDigital(2, 7, JOY_DOWN)) {   //Partner controller commands
+		shortShot = shortShot - 5;
+		delay(100);
+	}
+
+	if (joystickGetDigital(2, 7, JOY_UP)){
+		shortShot = shortShot + 5;
+		delay(100);
+	}
+
+	if (joystickGetDigital(2, 7, JOY_RIGHT)) {
+		speed = 77;
+	}
+	if (joystickGetDigital(2, 7, JOY_LEFT)) {
+		speed = 87;
 		delay(500);
-		speed = 90;
+		speed = 77;
 	}
 
-	if (joystickGetDigital(1, 8, JOY_RIGHT)){
-	speed = speed - 5;
-	delay(100);
-	}
 
+	//if (joystickGetDigital(2, 5, JOY_UP)){     pneumatic stopper
+	//
+	//}
+	//if (joystickGetDigital(2, 5, JOY_DOWN)){
+	//
+	//}
 	motorSet(2, -speed);
 	motorSet(9, speed);
 
@@ -140,5 +169,6 @@ void operatorControl() {
 		opBase();
 		opIntake();
 		opFlywheel();
+		lcdSetText(uart1, 1, "Hello, Chantelle.");
 	}
 }
