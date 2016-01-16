@@ -51,10 +51,11 @@
  *
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
+int isBraked = 0;
 
 void opBase() {                            ///Left side base
 	if (abs(joystickGetAnalog(1, 3)) > 15) {
-		motorSet(6, joystickGetAnalog(1, 3));
+		motorSet(6, -joystickGetAnalog(1, 3));
 		motorSet(7, joystickGetAnalog(1, 3));
 		motorSet(8, joystickGetAnalog(1, 3));
 	} else {
@@ -65,16 +66,27 @@ void opBase() {                            ///Left side base
 	if (abs(joystickGetAnalog(1, 2)) > 15) {
 		motorSet(3, -joystickGetAnalog(1, 2));
 		motorSet(4, -joystickGetAnalog(1, 2));
-		motorSet(5, -joystickGetAnalog(1, 2));
+		motorSet(5, joystickGetAnalog(1, 2));
 	} else {
 		motorSet(3, 0);
 		motorSet(4, 0);
 		motorSet(5, 0);
 	}
+
+	if (joystickGetDigital(1, 7, JOY_DOWN)) {  //Brake toggle
+		isBraked = abs(isBraked - 1);
+		delay(400);
+	}
+	if (isBraked == 1) {
+		digitalWrite(2, LOW);
+	} else if (isBraked == 0) {
+		digitalWrite(2, HIGH);
+	}
 }
 
 int topIntake = 0;
 int bottomIntake = 0;
+int isClosed = 0;
 
 void opIntake() {
 	if (joystickGetDigital(1, 5, JOY_UP)) {     //Sets both intakes to suck in
@@ -104,14 +116,29 @@ void opIntake() {
 		bottomIntake = 127;
 	}
 
-	if (joystickGetDigital(2, 6, JOY_UP)){     //Partner joystick top intake control
+	if (joystickGetDigital(2, 6, JOY_UP)) { //Partner joystick top intake control
 		bottomIntake = -127;
 	}
-	if (joystickGetDigital(2, 6, JOY_DOWN)){
+	if (joystickGetDigital(2, 6, JOY_DOWN)) {
 		bottomIntake = 127;
 	}
 	motorSet(1, topIntake);
 	motorSet(10, bottomIntake);
+	lcdSetText(uart1, 1, "Above joystick");
+	if (joystickGetDigital(1, 7, JOY_UP)) {   //Toggles top stopper
+		isClosed ^= 1;
+		if (isClosed) {
+			lcdSetText(uart1, 1, "Opening");
+			digitalWrite(1, HIGH);
+		} else {
+			lcdSetText(uart1, 1, "Closing");
+			digitalWrite(1, LOW);
+		}
+		lcdSetText(uart1, 1, "Exiting");
+		delay(400);
+		lcdSetText(uart1, 1, "Debounce Done");
+	}
+	//lcdSetText(uart1, 1, "Out");
 
 }
 
@@ -138,7 +165,7 @@ void opFlywheel() {
 		delay(100);
 	}
 
-	if (joystickGetDigital(2, 7, JOY_UP)){
+	if (joystickGetDigital(2, 7, JOY_UP)) {
 		shortShot = shortShot + 5;
 		delay(100);
 	}
@@ -152,23 +179,21 @@ void opFlywheel() {
 		speed = 77;
 	}
 
-
-	//if (joystickGetDigital(2, 5, JOY_UP)){     pneumatic stopper
-	//
-	//}
-	//if (joystickGetDigital(2, 5, JOY_DOWN)){
-	//
-	//}
 	motorSet(2, -speed);
 	motorSet(9, speed);
 
 }
 
 void operatorControl() {
-	while (1) {                ///Runs all functions
+	while (1) {
+		lcdSetText(uart1, 1, "Base");///Runs all functions
 		opBase();
+		lcdSetText(uart1, 1, "Intake");
 		opIntake();
+		lcdSetText(uart1, 1, "Flywheel");
 		opFlywheel();
-		lcdSetText(uart1, 1, "Hello, Chantelle.");
+		lcdSetText(uart1, 1, "Pause");
+		delay(20);
+		//lcdSetText(uart1, 1, "Hello, Chantelle.");
 	}
 }

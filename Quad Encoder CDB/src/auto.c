@@ -69,51 +69,104 @@ void flywheel(int motorControlValue) {
 }
 
 void autonomous() {
-	drive(-127, -127);   //127A's autonomous
-	delay(500);
-	flywheel(30);
-	delay(500);
-	flywheel(60);
-	delay(1000);
-	flywheel(80);
-	delay(3000);
-	drive(-127, 0); //Guarantees alignment
-	delay(250);
-	drive(0, -127); //Guarantees alignment
-	delay(250);
-	drive(0, 0);
-	intake(127); //1st shot
-	delay(800);
-	intake(0);
-	flywheel(80);
-	delay(200);
-	intake(127); //2nd shot
-	delay(800);
-	intake(0);
-	delay(400);
-	intake(127); //3rd shot
-	delay(1000);
-	intake(0);
-	delay(200);
-	intake(127); //4th shot
-	delay(800);
-	intake(0);
-	delay(200);
-	intake(127);
-	delay(800);
-	flywheel(78);
-	delay(1000);
-	delay(200);
-	flywheel(70);
-	delay(200);
-	flywheel(55);
-	delay(200);
-	flywheel(40);
-	delay(200);
-	flywheel(25);
-	delay(200);
-	flywheel(0);
+	if (autonMode == 2) {
+		drive(-127, -127);   //127A's autonomous
+		delay(500);
+		flywheel(30);
+		delay(500);
+		flywheel(60);
+		delay(1000);
+		flywheel(80);
+		delay(3000);
+		drive(-127, 0); //Guarantees alignment
+		delay(250);
+		drive(0, -127); //Guarantees alignment
+		delay(250);
+		drive(0, 0);
+		intake(127); //1st shot
+		delay(800);
+		intake(0);
+		flywheel(80);
+		delay(200);
+		intake(127); //2nd shot
+		delay(800);
+		intake(0);
+		delay(400);
+		intake(127); //3rd shot
+		delay(1000);
+		intake(0);
+		delay(200);
+		intake(127); //4th shot
+		delay(800);
+		intake(0);
+		delay(200);
+		intake(127);
+		delay(800);
+		flywheel(78);
+		delay(1000);
+		delay(200);
+		flywheel(70);
+		delay(200);
+		drive(50, 50);
+		flywheel(55);
+		delay(200);
+		flywheel(40);
+		drive(0, 0);
+		delay(200);
+		flywheel(25);
+		delay(200);
+		flywheel(0);
+	}
 
-
+	if(autonMode == 3){
+		delay(3000);
+		drive(-127, -127);   //127A's autonomous
+		delay(500);
+		flywheel(30);
+		delay(500);
+		flywheel(60);
+		delay(1000);
+		flywheel(80);
+		delay(3000);
+		drive(-127, 0); //Guarantees alignment
+		delay(250);
+		drive(0, -127); //Guarantees alignment
+		delay(250);
+		drive(0, 0);
+		intake(127); //1st shot
+		delay(800);
+		intake(0);
+		flywheel(80);
+		delay(200);
+		intake(127); //2nd shot
+		delay(800);
+		intake(0);
+		delay(400);
+		intake(127); //3rd shot
+		delay(1000);
+		intake(0);
+		delay(200);
+		intake(127); //4th shot
+		delay(800);
+		intake(0);
+		delay(200);
+		intake(127);
+		delay(800);
+		flywheel(78);
+		delay(200);
+		flywheel(70);
+		drive(50, 50);
+		delay(100);
+		flywheel(55);
+		delay(100);
+		flywheel(40);
+		delay(100);
+		flywheel(25);
+		delay(100);
+		flywheel(0);
+	}
+	if(autonMode == 4){
+		delay(15000);
+	}
 }
 

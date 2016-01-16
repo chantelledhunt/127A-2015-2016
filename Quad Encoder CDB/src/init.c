@@ -44,9 +44,11 @@
  */
 void initializeIO() {
 
-digitalWrite(1,HIGH);
+	digitalWrite(1, LOW);  //Topper
+	pinMode(1, OUTPUT);
+	digitalWrite(2, HIGH);  //Brake
+	pinMode(2, OUTPUT);
 
-pinMode(1, OUTPUT);
 }
 /*
  * Runs user initialization code. This function will be started in its own task with the default
@@ -66,15 +68,62 @@ Encoder rightquadencoder;
 Encoder leftflywheelquadencoder;
 Encoder rightflywheelquadencoder;
 
+int page = 2;
+
+void autonSelect() {
+	while (!isEnabled()) {
+		if (lcdReadButtons(uart1 ) == 1) {
+			page -= 1;
+			delay(200);
+		}
+		if (lcdReadButtons(uart1 ) == 4) {
+			page += 1;
+			delay(200);
+		}
+
+		if (page < 1) {
+			page = 4;
+		}
+		if (page > 4) {
+			page = 1;
+		}
+
+		if (page == 1) {
+			lcdPrint(uart1, 1, "Battery is at %d", powerLevelMain());
+		}
+
+		if (page == 2) {
+			lcdSetText(uart1, 1, "Normal Auton");
+			if (lcdReadButtons(uart1 ) == 2) {
+				autonMode = page;
+			}
+		}
+
+		if (page == 3) {
+			lcdSetText(uart1, 1, "Delay 3 Seconds");
+			if (lcdReadButtons(uart1 ) == 2) {
+				autonMode = page;
+			}
+		}
+
+		if (page == 4) {
+			lcdSetText(uart1, 1, "No Autonomous");
+			if (lcdReadButtons(uart1 ) == 2) {
+				autonMode = page;
+			}
+		}
+		delay(20);
+	}
+}
+
 void initialize() {
-leftquadencoder = encoderInit(1, 2, false);   //Base encoders are declared
-rightquadencoder = encoderInit(3, 4, true);
-rightflywheelquadencoder = encoderInit(5, 6, false); //Flywheel encoders are declared
-leftflywheelquadencoder = encoderInit(7, 8, false);
+	leftquadencoder = encoderInit(1, 2, false);   //Base encoders are declared
+	rightquadencoder = encoderInit(3, 4, true);
+	rightflywheelquadencoder = encoderInit(5, 6, false); //Flywheel encoders are declared
+	leftflywheelquadencoder = encoderInit(7, 8, false);
 
-lcdInit(uart1);
-lcdClear(uart1);
-lcdInit(uart2);
-lcdClear(uart2);
+	lcdInit(uart1 );
+	lcdClear(uart1 );
 
- }
+	autonSelect();
+}

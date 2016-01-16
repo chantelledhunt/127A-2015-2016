@@ -118,6 +118,7 @@ extern Encoder rightquadencoder;
 extern Encoder leftflywheelquadencoder;
 extern Encoder rightflywheelquadencoder;
 
+int autonMode;
 
 // End C++ export structure
 #ifdef __cplusplus
