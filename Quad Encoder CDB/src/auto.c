@@ -50,12 +50,12 @@
  */
 
 void drive(int left, int right) {
-	motorSet(6, left);
+	motorSet(6, -left);
 	motorSet(7, left);
 	motorSet(8, left);
 	motorSet(3, -right);
 	motorSet(4, -right);
-	motorSet(5, -right);
+	motorSet(5, right);
 }
 
 void intake(int motorControlValue) {
@@ -70,12 +70,11 @@ void flywheel(int motorControlValue) {
 
 void autonomous() {
 	if (autonMode == 2) {
-		drive(-127, -127);   //127A's autonomous
-		delay(500);
-		flywheel(30);
+		drive(-127, -127);
+		flywheel(40);          //127A's autonomous
 		delay(500);
 		flywheel(60);
-		delay(1000);
+		delay(500);
 		flywheel(80);
 		delay(3000);
 		drive(-127, 0); //Guarantees alignment
@@ -86,7 +85,7 @@ void autonomous() {
 		intake(127); //1st shot
 		delay(800);
 		intake(0);
-		flywheel(80);
+		flywheel(77);
 		delay(200);
 		intake(127); //2nd shot
 		delay(800);
@@ -102,7 +101,7 @@ void autonomous() {
 		delay(200);
 		intake(127);
 		delay(800);
-		flywheel(78);
+		flywheel(68);
 		delay(1000);
 		delay(200);
 		flywheel(70);
@@ -121,13 +120,14 @@ void autonomous() {
 	if(autonMode == 3){
 		delay(3000);
 		drive(-127, -127);   //127A's autonomous
-		delay(500);
 		flywheel(30);
 		delay(500);
-		flywheel(60);
+		flywheel(50);
+		delay(500);
+		flywheel(70);
 		delay(1000);
 		flywheel(80);
-		delay(3000);
+		delay(2000);
 		drive(-127, 0); //Guarantees alignment
 		delay(250);
 		drive(0, -127); //Guarantees alignment

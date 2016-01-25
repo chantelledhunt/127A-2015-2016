@@ -78,9 +78,9 @@ void opBase() {                            ///Left side base
 		delay(400);
 	}
 	if (isBraked == 1) {
-		digitalWrite(2, LOW);
-	} else if (isBraked == 0) {
 		digitalWrite(2, HIGH);
+	} else if (isBraked == 0) {
+		digitalWrite(2, LOW);
 	}
 }
 
@@ -124,27 +124,27 @@ void opIntake() {
 	}
 	motorSet(1, topIntake);
 	motorSet(10, bottomIntake);
-	lcdSetText(uart1, 1, "Above joystick");
-	if (joystickGetDigital(1, 7, JOY_UP)) {   //Toggles top stopper
-		isClosed ^= 1;
-		if (isClosed) {
-			lcdSetText(uart1, 1, "Opening");
-			digitalWrite(1, HIGH);
-		} else {
-			lcdSetText(uart1, 1, "Closing");
-			digitalWrite(1, LOW);
-		}
-		lcdSetText(uart1, 1, "Exiting");
-		delay(400);
-		lcdSetText(uart1, 1, "Debounce Done");
-	}
+//	lcdSetText(uart1, 1, "Above joystick");
+//	if (joystickGetDigital(1, 7, JOY_UP)) {   //Toggles top stopper
+//		isClosed ^= 1;
+//		if (isClosed) {
+//			lcdSetText(uart1, 1, "Opening");
+//			digitalWrite(1, HIGH);
+//		} else {
+//			lcdSetText(uart1, 1, "Closing");
+//			digitalWrite(1, LOW);
+//		}
+//		lcdSetText(uart1, 1, "Exiting");
+//		delay(400);
+//		lcdSetText(uart1, 1, "Debounce Done");
+//	}
 	//lcdSetText(uart1, 1, "Out");
 
 }
 
 int speed = 0;
 int longShot = 127;
-int shortShot = 77;
+int shortShot = 73;
 
 void opFlywheel() {
 	if (joystickGetDigital(1, 8, JOY_UP)) {    //Sets speed for long range shot
@@ -156,18 +156,32 @@ void opFlywheel() {
 	}
 
 	if (joystickGetDigital(1, 8, JOY_RIGHT)) {
-		speed = speed - 5;
-		delay(100);
+		shortShot = shortShot - 5;
+		speed = shortShot;
+		delay(200);
+	}
+
+	if (joystickGetDigital(1, 8, JOY_LEFT)) {
+		shortShot = shortShot + 1;
+		speed = shortShot;
+		delay(200);
+	}
+
+	if(joystickGetDigital(1, 7, JOY_UP)){
+		speed = 127;
+		delay(500);
+		speed = shortShot;
 	}
 
 	if (joystickGetDigital(2, 7, JOY_DOWN)) {   //Partner controller commands
 		shortShot = shortShot - 5;
-		delay(100);
+		speed = shortShot;
+		delay(200);
 	}
 
 	if (joystickGetDigital(2, 7, JOY_UP)) {
 		shortShot = shortShot + 5;
-		delay(100);
+		delay(200);
 	}
 
 	if (joystickGetDigital(2, 7, JOY_RIGHT)) {
@@ -176,7 +190,7 @@ void opFlywheel() {
 	if (joystickGetDigital(2, 7, JOY_LEFT)) {
 		speed = 87;
 		delay(500);
-		speed = 77;
+		speed = 7;
 	}
 
 	motorSet(2, -speed);

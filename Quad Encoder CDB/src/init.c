@@ -44,9 +44,9 @@
  */
 void initializeIO() {
 
-	digitalWrite(1, LOW);  //Topper
+	digitalWrite(1, LOW);  //Stopper
 	pinMode(1, OUTPUT);
-	digitalWrite(2, HIGH);  //Brake
+	digitalWrite(2, LOW);  //Brake
 	pinMode(2, OUTPUT);
 
 }
