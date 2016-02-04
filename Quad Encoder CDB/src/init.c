@@ -44,6 +44,9 @@
  */
 void initializeIO() {
 
+	pinMode(7, INPUT);
+	pinMode(8, INPUT);
+
 	digitalWrite(1, LOW);  //Stopper
 	pinMode(1, OUTPUT);
 	digitalWrite(2, LOW);  //Brake
@@ -82,9 +85,9 @@ void autonSelect() {
 		}
 
 		if (page < 1) {
-			page = 4;
+			page = 5;
 		}
-		if (page > 4) {
+		if (page > 5) {
 			page = 1;
 		}
 
@@ -107,6 +110,13 @@ void autonSelect() {
 		}
 
 		if (page == 4) {
+			lcdSetText(uart1, 1, "Outdevious R");
+			if (lcdReadButtons(uart1 ) == 2) {
+				autonMode = page;
+			}
+		}
+
+		if (page == 5) {
 			lcdSetText(uart1, 1, "No Autonomous");
 			if (lcdReadButtons(uart1 ) == 2) {
 				autonMode = page;
@@ -117,7 +127,7 @@ void autonSelect() {
 }
 
 void initialize() {
-	leftquadencoder = encoderInit(1, 2, false);   //Base encoders are declared
+	leftquadencoder = encoderInit(1, 2, false); //Base encoders are declared
 	rightquadencoder = encoderInit(3, 4, true);
 	rightflywheelquadencoder = encoderInit(5, 6, false); //Flywheel encoders are declared
 	leftflywheelquadencoder = encoderInit(7, 8, false);

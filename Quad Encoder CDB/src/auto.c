@@ -49,6 +49,8 @@
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
 
+int buttonPressed = 0;
+
 void drive(int left, int right) {
 	motorSet(6, -left);
 	motorSet(7, left);
@@ -69,23 +71,40 @@ void flywheel(int motorControlValue) {
 }
 
 void autonomous() {
+	if (digitalRead(7 || 8) == LOW) {
+		buttonPressed = 1;
+	} else {
+		buttonPressed = 0;
+	}
+
 	if (autonMode == 2) {
 		drive(-127, -127);
-		flywheel(40);          //127A's autonomous
+		flywheel(40);     //127A's autonomous
 		delay(500);
 		flywheel(60);
 		delay(500);
-		flywheel(80);
+		flywheel(79);
+		if (buttonPressed == 1) {
+			drive(0, 0);
+			flywheel(60);
+			delay(500);
+			flywheel(40);
+			delay(500);
+			flywheel(0);
+			delay(15000);
+		}
 		delay(3000);
 		drive(-127, 0); //Guarantees alignment
 		delay(250);
 		drive(0, -127); //Guarantees alignment
 		delay(250);
-		drive(0, 0);
+		drive(00, 50);
 		intake(127); //1st shot
-		delay(800);
+		delay(200);
+		drive(0, 0);
+		delay(600);
 		intake(0);
-		flywheel(77);
+		flywheel(76);
 		delay(200);
 		intake(127); //2nd shot
 		delay(800);
@@ -117,26 +136,35 @@ void autonomous() {
 		flywheel(0);
 	}
 
-	if(autonMode == 3){
+	if (autonMode == 3) {
 		delay(3000);
-		drive(-127, -127);   //127A's autonomous
-		flywheel(30);
+		drive(-127, -127);
+		flywheel(40);     //127A's autonomous
 		delay(500);
-		flywheel(50);
+		flywheel(60);
 		delay(500);
-		flywheel(70);
-		delay(1000);
-		flywheel(80);
-		delay(2000);
+		flywheel(79);
+		if (buttonPressed == 1) {
+			drive(0, 0);
+			flywheel(60);
+			delay(500);
+			flywheel(40);
+			delay(500);
+			flywheel(0);
+			delay(15000);
+		}
+		delay(3000);
 		drive(-127, 0); //Guarantees alignment
 		delay(250);
 		drive(0, -127); //Guarantees alignment
 		delay(250);
-		drive(0, 0);
+		drive(00, 50);
 		intake(127); //1st shot
-		delay(800);
+		delay(200);
+		drive(0, 0);
+		delay(600);
 		intake(0);
-		flywheel(80);
+		flywheel(76);
 		delay(200);
 		intake(127); //2nd shot
 		delay(800);
@@ -152,20 +180,81 @@ void autonomous() {
 		delay(200);
 		intake(127);
 		delay(800);
-		flywheel(78);
+		flywheel(68);
+		delay(1000);
 		delay(200);
 		flywheel(70);
+		delay(200);
 		drive(50, 50);
-		delay(100);
 		flywheel(55);
-		delay(100);
+		delay(200);
 		flywheel(40);
-		delay(100);
+		drive(0, 0);
+		delay(200);
 		flywheel(25);
-		delay(100);
+		delay(200);
 		flywheel(0);
 	}
-	if(autonMode == 4){
+
+	if (autonMode == 4) {
+		drive(-127, -127);
+		flywheel(40);          //127A's autonomous
+		delay(500);
+		flywheel(60);
+		delay(500);
+		flywheel(79);
+		drive(0, 0);
+		delay(200);
+		drive(-127, 127);
+		delay(500);
+		drive(-127, -127);
+		delay(500);
+		drive(127, -127);
+		delay(400);
+		drive(-127, -127);
+		delay(2000);
+		drive(-127, 0); //Guarantees alignment
+		delay(250);
+		drive(0, -127); //Guarantees alignment
+		delay(250);
+		drive(00, 50);
+		intake(127); //1st shot
+		delay(200);
+		drive(0, 0);
+		delay(600);
+		intake(0);
+		flywheel(76);
+		delay(200);
+		intake(127); //2nd shot
+		delay(800);
+		intake(0);
+		delay(400);
+		intake(127); //3rd shot
+		delay(1000);
+		intake(0);
+		delay(200);
+		intake(127); //4th shot
+		delay(800);
+		intake(0);
+		delay(200);
+		intake(127);
+		delay(800);
+		flywheel(68);
+		delay(1000);
+		delay(200);
+		flywheel(70);
+		delay(200);
+		drive(50, 50);
+		flywheel(55);
+		delay(200);
+		flywheel(40);
+		drive(0, 0);
+		delay(200);
+		flywheel(25);
+		delay(200);
+		flywheel(0);
+	}
+	if (autonMode == 5) {
 		delay(15000);
 	}
 }

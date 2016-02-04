@@ -144,7 +144,7 @@ void opIntake() {
 
 int speed = 0;
 int longShot = 127;
-int shortShot = 73;
+int shortShot = 75;
 
 void opFlywheel() {
 	if (joystickGetDigital(1, 8, JOY_UP)) {    //Sets speed for long range shot
