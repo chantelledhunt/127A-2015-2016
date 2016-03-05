@@ -71,7 +71,7 @@ Encoder rightquadencoder;
 Encoder leftflywheelquadencoder;
 Encoder rightflywheelquadencoder;
 
-int page = 2;
+int page = 1;
 
 void autonSelect() {
 	while (!isEnabled()) {
@@ -85,9 +85,9 @@ void autonSelect() {
 		}
 
 		if (page < 1) {
-			page = 5;
+			page = 7;
 		}
-		if (page > 5) {
+		if (page > 7) {
 			page = 1;
 		}
 
@@ -118,6 +118,20 @@ void autonSelect() {
 
 		if (page == 5) {
 			lcdSetText(uart1, 1, "No Autonomous");
+			if (lcdReadButtons(uart1 ) == 2) {
+				autonMode = page;
+			}
+		}
+
+		if (page == 6){
+			lcdSetText(uart1, 1, "Programming Skills");
+			if (lcdReadButtons(uart1 ) == 2) {
+				autonMode = page;
+			}
+		}
+
+		if (page == 7){
+			lcdSetText(uart1, 1, "Low Power");
 			if (lcdReadButtons(uart1 ) == 2) {
 				autonMode = page;
 			}

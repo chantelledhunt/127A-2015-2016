@@ -108,11 +108,11 @@ void opIntake() {
 		topIntake = -127;
 	}
 
-	if (joystickGetDigital(1, 7, JOY_LEFT)) {      //Sets bottom intake to go up
+	if (joystickGetDigital(1, 7, JOY_UP)) {      //Sets bottom intake to go up
 		bottomIntake = -127;
 	}
 
-	if (joystickGetDigital(1, 7, JOY_RIGHT)) {
+	if (joystickGetDigital(1, 7, JOY_DOWN)) {    //Bottom intake goes down
 		bottomIntake = 127;
 	}
 
@@ -122,8 +122,8 @@ void opIntake() {
 	if (joystickGetDigital(2, 6, JOY_DOWN)) {
 		bottomIntake = 127;
 	}
-	motorSet(1, topIntake);
-	motorSet(10, bottomIntake);
+	motorSet(10, -topIntake);
+	motorSet(1, -bottomIntake);
 //	lcdSetText(uart1, 1, "Above joystick");
 //	if (joystickGetDigital(1, 7, JOY_UP)) {   //Toggles top stopper
 //		isClosed ^= 1;
@@ -144,7 +144,7 @@ void opIntake() {
 
 int speed = 0;
 int longShot = 127;
-int shortShot = 75;
+int shortShot = 64;
 
 void opFlywheel() {
 	if (joystickGetDigital(1, 8, JOY_UP)) {    //Sets speed for long range shot
