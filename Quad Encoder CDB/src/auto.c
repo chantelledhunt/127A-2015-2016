@@ -52,255 +52,105 @@
 bool buttonPressed = 0;
 
 void drive(int left, int right) {
-	motorSet(6, -left);
-	motorSet(7, left);
-	motorSet(8, left);
-	motorSet(3, -right);
-	motorSet(4, -right);
-	motorSet(5, right);
+	motorSet(5, -left);
+	motorSet(6, -right);
 }
 
-void intake(int motorControlValue) {
-	motorSet(10, -motorControlValue);
+void lift(int motorControlValue) {
 	motorSet(1, motorControlValue);
-}
-
-void flywheel(int motorControlValue) {
 	motorSet(2, -motorControlValue);
-	motorSet(9, motorControlValue);
+	motorSet(4, -motorControlValue);
+	motorSet(7, -motorControlValue);
+	motorSet(8, -motorControlValue);
+	motorSet(9, -motorControlValue);
 }
 
 void autonomous() {
-	if (autonMode == 2) {
-		drive(-127, -127);
-		flywheel(61);
-		delay(4000);
-		drive(-127, 0); //Guarantees alignment
-		delay(250);
-		drive(0, -127); //Guarantees alignment
-		delay(250);
-		drive(0, 0);
-		intake(127); //1st shot
-		delay(500);
-		intake(0);
-		flywheel(67);
-		delay(400);
-		intake(127); //2nd shot
-		delay(400);
-		intake(0);
-		delay(400);
-		intake(127); //3rd shot
-		delay(400);
-		intake(0);
-		delay(400);
-		intake(127); //4th shot
-		delay(400);
-		intake(0);
-		delay(200);
-		intake(127);
-		delay(800);
-		flywheel(68);
-		delay(1000);
-		delay(200);
-		flywheel(70);
-		delay(200);
-		intake(0);
-		drive(50, 50);
-		flywheel(55);
-		delay(200);
-		flywheel(40);
-		drive(0, 0);
-		delay(200);
-		flywheel(25);
-		delay(200);
-		flywheel(0);
-		delay(10000);
-		drive(0, 0);
-		intake(0);
-		flywheel(50);
-		delay(500);
-		flywheel(0);
-		delay(15000);
-	}
-
-	if (autonMode == 3) {
-		delay(3000);
-		drive(-127, -127);   //127A's Delayed Autonomous
-		flywheel(61);
-		delay(4000);
-		drive(-127, 0); //Guarantees alignment
-		delay(250);
-		drive(0, -127); //Guarantees alignment
-		delay(250);
-		drive(0, 0);
-		intake(127); //1st shot
-		delay(500);
-		intake(0);
-		flywheel(67);
-		delay(400);
-		intake(127); //2nd shot
-		delay(400);
-		intake(0);
-		delay(400);
-		intake(127); //3rd shot
-		delay(400);
-		intake(0);
-		delay(400);
-		intake(127); //4th shot
-		delay(400);
-		intake(0);
-		delay(200);
-		intake(127);
-		delay(800);
-		flywheel(68);
-		delay(1000);
-		delay(200);
-		flywheel(70);
-		delay(200);
-		intake(0);
-		drive(50, 50);
-		flywheel(55);
-		delay(200);
-		flywheel(40);
-		drive(0, 0);
-		delay(200);
-		flywheel(25);
-		delay(200);
-		flywheel(0);
-		delay(10000);
-		drive(0, 0);
-		intake(0);
-		flywheel(50);
-		delay(500);
-		flywheel(0);
-		delay(15000);
-	}
-
-	if (autonMode == 4) {
-		drive(-127, -127);
-		flywheel(40);          //127A's autonomous
-		delay(500);
-		flywheel(60);
-		delay(500);
-		flywheel(79);
-		drive(0, 0);
-		delay(200);
-		drive(-127, 127);
-		delay(500);
-		drive(-127, -127);
-		delay(500);
-		drive(127, -127);
-		delay(400);
-		drive(-127, -127);
-		delay(2000);
-		drive(-127, 0); //Guarantees alignment
-		delay(250);
-		drive(0, -127); //Guarantees alignment
-		delay(250);
-		drive(00, 50);
-		intake(127); //1st shot
-		delay(200);
-		drive(0, 0);
-		delay(600);
-		intake(0);
-		flywheel(76);
-		delay(200);
-		intake(127); //2nd shot
-		delay(800);
-		intake(0);
-		delay(400);
-		intake(127); //3rd shot
-		delay(1000);
-		intake(0);
-		delay(200);
-		intake(127); //4th shot
-		delay(800);
-		intake(0);
-		delay(200);
-		intake(127);
-		delay(800);
-		flywheel(68);
-		delay(1000);
-		delay(200);
-		flywheel(70);
-		delay(200);
-		drive(50, 50);
-		flywheel(55);
-		delay(200);
-		flywheel(40);
-		drive(0, 0);
-		delay(200);
-		flywheel(25);
-		delay(200);
-		flywheel(0);
-	}
-	if (autonMode == 5) {
-		delay(15000);
-	}
-	if (autonMode == 6) {   ///Programming skills
-		drive(-50, -50);
-		delay(350);
-		drive(0, 0);
-		flywheel(127);
-		delay(4000);
-		while (1) {
-			intake(0);
-			delay(1300);
-			intake(127);
-			delay(700);
-
-		}
-	}
-	if (autonMode == 7) {            // Low battery autonomous
-		drive(-127, -127);
-		flywheel(63);
-		delay(4200);
-		drive(-127, 0); //Guarantees alignment
-		delay(250);
-		drive(0, -127); //Guarantees alignment
-		delay(250);
-		drive(0, 0);
-		intake(127); //1st shot
-		delay(500);
-		intake(0);
-		flywheel(69);
-		delay(400);
-		intake(127); //2nd shot
-		delay(400);
-		intake(0);
-		delay(400);
-		intake(127); //3rd shot
-		delay(400);
-		intake(0);
-		delay(400);
-		intake(127); //4th shot
-		delay(400);
-		intake(0);
-		delay(200);
-		intake(127);
-		delay(800);
-		flywheel(68);
-		delay(1000);
-		delay(200);
-		flywheel(70);
-		intake(0);
-		delay(200);
-		drive(50, 50);
-		flywheel(55);
-		delay(200);
-		flywheel(40);
-		drive(0, 0);
-		delay(200);
-		flywheel(25);
-		delay(200);
-		flywheel(0);
-		delay(10000);
-		drive(0, 0);
-		intake(0);
-		flywheel(50);
-		delay(500);
-		flywheel(0);
-		delay(15000);
-	}
+	lift(127);
+	delay(270);
+	lift(0);
+	drive(127, 127);
+	delay(2500);
+	drive(0,0);
+	delay(100);
+	drive(-127, -127);
+	delay(200);
+	drive(80,-80); //Turn
+	delay(1100);
+	drive(0, 0);
+	lift(-70); //Lift descends
+	delay(200);
+	drive(127, 127);
+	delay(400);
+	drive(-127, -127); //Fold out fork
+	delay(500);
+	drive(127, 1270);
+	lift(0);
+	delay(1100);
+	lift(127); //Lift star
+	delay(600);
+	lift(10);
+	drive(-127, -127);
+	delay(1400);
+	lift(127);
+	delay(200);
+	drive(0,0);
+	delay(300);
+	lift(0);
+//	lift(127);
+//	delay(300);
+//	lift(0);
+//	delay(50);
+//	while(digitalRead(1)==1){
+//		lift(-40);
+//	}
+//	lift(0);
+//	delay(500);
+//	drive(127, 127);
+//	delay(500);
+//	drive(-127,-127);
+//	delay(200);
+//	drive(0, 80); //Turn to align with cube
+//	delay(180);
+//	drive(70, 70);
+//	delay(2000);
+//	drive(0,0);
+//	delay(500);
+//	lift(80);
+//	delay(350); //Lift cube
+//	lift(60);
+//	delay(50);
+//	lift(10);
+//	delay(1500);
+//	drive(-50, 50);
+//	delay(1200); //Turn to throw
+//	drive(0,0);
+//	delay(200);
+//	drive(-127, -127);
+//	delay(300);
+//	lift(127); //Throw
+//	delay(400);
+//	lift(0);
+//	delay(100);
+//	lift(-60); //Reset
+//	delay(300);
+//	drive(127, 127);
+//	delay(800);
+//	drive(0,0);
+//	lift(0);
+//	delay(600);
+//	drive(127, 127);
+//	delay(300);
+//	drive(0,0);
+//	lift(127); //Pick up stars
+//	delay(500);
+//	lift(10);
+//	drive(-127, -127);
+//	delay(1000);
+//	lift(127);
+//	delay(700);
+//	drive(0,0);
+//	lift(0);
+//	delay(1000);
 }
 

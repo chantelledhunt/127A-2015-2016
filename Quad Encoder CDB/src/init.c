@@ -44,13 +44,8 @@
  */
 void initializeIO() {
 
-	pinMode(7, INPUT);
-	pinMode(8, INPUT);
-
-	digitalWrite(1, LOW);  //Stopper
 	pinMode(1, OUTPUT);
-	digitalWrite(2, LOW);  //Brake
-	pinMode(2, OUTPUT);
+	digitalWrite(1, LOW);
 
 }
 /*
@@ -66,10 +61,6 @@ void initializeIO() {
  * will not start. An autonomous mode selection menu like the pre_auton() in other environments
  * can be implemented in this task if desired.
  */
-Encoder leftquadencoder;
-Encoder rightquadencoder;
-Encoder leftflywheelquadencoder;
-Encoder rightflywheelquadencoder;
 
 int page = 1;
 
@@ -103,14 +94,14 @@ void autonSelect() {
 		}
 
 		if (page == 3) {
-			lcdSetText(uart1, 1, "Delay 3 Seconds");
+			lcdSetText(uart1, 1, "Delay 5 Seconds");
 			if (lcdReadButtons(uart1 ) == 2) {
 				autonMode = page;
 			}
 		}
 
 		if (page == 4) {
-			lcdSetText(uart1, 1, "Outdevious R");
+			lcdSetText(uart1, 1, "Red stack");
 			if (lcdReadButtons(uart1 ) == 2) {
 				autonMode = page;
 			}
@@ -123,15 +114,15 @@ void autonSelect() {
 			}
 		}
 
-		if (page == 6){
+		if (page == 6) {
 			lcdSetText(uart1, 1, "Programming Skills");
 			if (lcdReadButtons(uart1 ) == 2) {
 				autonMode = page;
 			}
 		}
 
-		if (page == 7){
-			lcdSetText(uart1, 1, "Low Power");
+		if (page == 7) {
+			lcdSetText(uart1, 1, "Blue stack");
 			if (lcdReadButtons(uart1 ) == 2) {
 				autonMode = page;
 			}
@@ -141,11 +132,6 @@ void autonSelect() {
 }
 
 void initialize() {
-	leftquadencoder = encoderInit(1, 2, false); //Base encoders are declared
-	rightquadencoder = encoderInit(3, 4, true);
-	rightflywheelquadencoder = encoderInit(5, 6, false); //Flywheel encoders are declared
-	leftflywheelquadencoder = encoderInit(7, 8, false);
-
 	lcdInit(uart1 );
 	lcdClear(uart1 );
 
